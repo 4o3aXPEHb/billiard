@@ -10,6 +10,7 @@ const AdminPanel = ({ children }) => {
         { label: 'Клиенты', route: '/admin/clients' },
         { label: 'Турниры', route: '/admin/tournaments' },
         { label: 'Заказы', route: '/admin/orders' },
+        {label: 'Главная', route: '/'}
     ];
 
     // Определяем активную вкладку на основе текущего URL

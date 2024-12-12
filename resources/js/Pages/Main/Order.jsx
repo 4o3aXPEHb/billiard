@@ -9,7 +9,7 @@ const Order = () => {
     const [selectedDate, setSelectedDate] = useState('');
     const [startTime, setStartTime] = useState('');
     const [endTime, setEndTime] = useState('');
-    const [clientInfo, setClientInfo] = useState({ name: '', email: '' });
+    const [clientInfo, setClientInfo] = useState({ name: '', email: '' , phone:''});
 
     // Генерация времени с кратностью в 15 минут
     const generateTimeSlots = () => {
@@ -156,26 +156,37 @@ const Order = () => {
                     </select>
                 </div>
 
-                {/* Поля контактной информации */}
-                <div>
-                    <label>Имя:</label>
-                    <input
-                        type="text"
-                        value={clientInfo.name}
-                        onChange={(e) => setClientInfo({ ...clientInfo, name: e.target.value })}
-                        required
-                    />
-                </div>
-                <div>
-                    <label>Email:</label>
-                    <input
-                        type="email"
-                        value={clientInfo.email}
-                        onChange={(e) => setClientInfo({ ...clientInfo, email: e.target.value })}
-                        required
-                    />
-                </div>
-
+                {/* Поля контактной информации Если юзер не вошел или Если админ зашел*/}
+                {(!user || user.role === 'admin') &&
+                    <div>
+                        <div>
+                            <label>Имя:</label>
+                            <input
+                                type="text"
+                                value={clientInfo.name}
+                                onChange={(e) => setClientInfo({...clientInfo, name: e.target.value})}
+                                required
+                            />
+                        </div>
+                        <div>
+                            <label>Email:</label>
+                            <input
+                                type="email"
+                                value={clientInfo.email}
+                                onChange={(e) => setClientInfo({...clientInfo, email: e.target.value})}
+                            />
+                        </div>
+                        <div>
+                            <label>Phone:</label>
+                            <input
+                                type="tel"
+                                value={clientInfo.phone}
+                                onChange={(e) => setClientInfo({...clientInfo, phone: e.target.value})}
+                                required
+                            />
+                        </div>
+                    </div>
+                }
                 {/* Кнопка отправки */}
                 <button type="submit">Забронировать</button>
             </form>

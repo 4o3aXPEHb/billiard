@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { AppBar, Toolbar, Typography, Tabs, Tab, Box } from '@mui/material';
 import { Inertia } from '@inertiajs/inertia';
 import DropDownProfile from "@/Components/DropDownProfile.jsx";
+import {Link} from "@inertiajs/react";
 
 
 const MainPage = ({ children , user}) => {
@@ -40,14 +41,36 @@ const MainPage = ({ children , user}) => {
                             <Tab key={index} label={tab.label} />
                         ))}
                     </Tabs>
-                    <DropDownProfile user = {user}></DropDownProfile>
-                    {user.role == 'admin' && < div > < a href={'/admin'}>Админ панель</a></div>}
 
+                    {/*Вход и Регист  ИЛИ  Профиль*/}
+                    {user ? (
+                        <div>
+                            <DropDownProfile user = {user}></DropDownProfile>
+                            {user.role === 'admin' && < div > < a href={'/admin'}>Админ панель</a></div>}
+                        </div>
+                    ) : (
+                        <>
+                            <Link
+                                    href={route('login')}
+                                className="font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500"
+                            >
+                                Log in
+                            </Link>
+
+                            <Link
+                                href={route('register')}
+                                className="ms-4 font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500"
+                            >
+                                Register
+                            </Link>
+                        </>
+                    )}
                 </Toolbar>
 
             </AppBar>
             <Box sx={{ padding: 3 }}>{children}</Box>
         </Box>
+
     );
 };
 

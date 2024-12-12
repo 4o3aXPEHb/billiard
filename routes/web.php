@@ -19,17 +19,17 @@ use Inertia\Inertia;
 |
 */
 
-Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
-});
-Route::get('/dash',function (){
-    return Inertia::render('Dashboard');
-})->name('dashboard');
+//Route::get('/', function () {
+//    return Inertia::render('Welcome', [
+//        'canLogin' => Route::has('login'),
+//        'canRegister' => Route::has('register'),
+//        'laravelVersion' => Application::VERSION,
+//        'phpVersion' => PHP_VERSION,
+//    ]);
+//});
+//Route::get('/dash',function (){
+//    return Inertia::render('Dashboard');
+//})->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -48,14 +48,15 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
 // Для авторизованых
 Route::middleware(['auth'])->group(function () {
-    Route::get('/main', [UserController::class, 'index'])->name('user.main');
-
-    Route::get('/main/order',[UserController::class, 'order'])->name('main.order');
-
-    Route::get('/main/tournaments',function (){
-        return Inertia::render('Main/Tournaments');
-    })->name('main.tournaments');
-
-    Route::post('/main/order',[UserController::class, 'orderPost'])->name('main.order.post');
 });
+
+//Для всех
+Route::get('/', [UserController::class, 'index'])->name('main');
+Route::get('/order',[UserController::class, 'order'])->name('main.order');
+Route::get('/tournaments',function (){
+    return Inertia::render('Main/Tournaments');
+})->name('main.tournaments');
+Route::post('/order',[UserController::class, 'orderPost'])->name('main.order.post');
+
+
 require __DIR__.'/auth.php';
