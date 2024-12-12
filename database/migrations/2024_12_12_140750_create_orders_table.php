@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('id_admin')->references('id')->on('users');
-            $table->integer('id_user')->references('id')->on('users');
+            $table->integer('id_admin')->nullable()->references('id')->on('users');
+            $table->integer('id_user')->nullable()->references('id')->on('users');
             $table->string('status');
             $table->decimal('total_price', 8, 2 );
             $table->timestamp('created_at')->useCurrent();

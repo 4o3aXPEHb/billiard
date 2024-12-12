@@ -27,9 +27,9 @@ use Inertia\Inertia;
 //        'phpVersion' => PHP_VERSION,
 //    ]);
 //});
-//Route::get('/dash',function (){
-//    return Inertia::render('Dashboard');
-//})->name('dashboard');
+Route::get('/dash',function (){
+    return Inertia::render('Dashboard');
+})->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -57,6 +57,8 @@ Route::get('/tournaments',function (){
     return Inertia::render('Main/Tournaments');
 })->name('main.tournaments');
 Route::post('/order',[UserController::class, 'orderPost'])->name('main.order.post');
+Route::get('/order/confirm/{id}',[UserController::class, 'orderConfirm'])->name('main.order.confirm');
+Route::post('/order/update-status',[UserController::class, 'orderUpdateStatus'])->name('main.order.update.status');
 
 
 require __DIR__.'/auth.php';

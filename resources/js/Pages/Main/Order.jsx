@@ -2,9 +2,10 @@ import React, { useState } from 'react';
 import MainPage from "@/Pages/Main/MainPage.jsx";
 import {usePage} from "@inertiajs/react";
 import {Inertia} from "@inertiajs/inertia";
+import {router} from "@inertiajs/core";
 
 const Order = () => {
-    const { tables, bookedTables , user} = usePage().props;
+    const { tables, bookedTables , user, orderStatus} = usePage().props;
     const [selectedTable, setSelectedTable] = useState(null);
     const [selectedDate, setSelectedDate] = useState('');
     const [startTime, setStartTime] = useState('');
@@ -68,13 +69,23 @@ const Order = () => {
         };
 
         console.log('Отправка данных:', payload);
-        Inertia.post(route('main.order.post'), {
+        // Inertia.post(route('main.order.post'), {
+        //     id_table: selectedTable,
+        //     timeStart: `${selectedDate} ${startTime}`,
+        //     timeEnd: `${selectedDate} ${endTime}`,
+        //     client: clientInfo,
+        // });
+        axios.post(route('main.order.post'), {
             id_table: selectedTable,
             timeStart: `${selectedDate} ${startTime}`,
             timeEnd: `${selectedDate} ${endTime}`,
             client: clientInfo,
-        });
-        alert('Стол успешно забронирован!');
+        })
+        .then(response => {
+            if (response.data.redirect) {
+                router.get(response.data.redirect)
+            }
+        })
     };
 
     return (
