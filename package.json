@@ -22,6 +22,7 @@
     "dependencies": {
         "@emotion/react": "^11.14.0",
         "@emotion/styled": "^11.14.0",
+        "@inertiajs/core": "^2.0.0",
         "@inertiajs/inertia": "^0.11.1",
         "@mui/material": "^6.1.10"
     }

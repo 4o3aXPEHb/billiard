@@ -44,6 +44,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin/clients', [AdminController::class, 'clients'])->name('admin.clients');
     Route::get('/admin/tournaments', [AdminController::class, 'tournaments'])->name('admin.tournaments');
     Route::get('/admin/orders', [AdminController::class, 'orders'])->name('admin.orders');
+    Route::get('/admin/orders/{id}', [AdminController::class, 'orderDetails'])->name('admin.orders.details');
     Route::post('/admin/clients/{id}/update', [AdminController::class, 'clientUpdate'])->name('clients.update');
 });
 

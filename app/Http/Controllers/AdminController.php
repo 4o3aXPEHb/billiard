@@ -47,6 +47,14 @@ class AdminController extends Controller
         ]);
     }
 
+    public function orderDetails($id){
+        $order = Order::with(['user', 'admin', 'orderedTables.blockedTable'])->find($id);
+        return Inertia::render('Admin/OrderDetailsPage', [
+            'order' => $order,
+            'user' => Auth::user(),
+        ]);
+    }
+
     public function tournaments(){
         return Inertia::render('Admin/Tournaments');
     }

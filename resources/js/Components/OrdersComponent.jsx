@@ -82,6 +82,12 @@ const OrdersComponent = () => {
                                     <p>Стол ID: {booking.tableId}</p>
                                     <p>Время начала: {new Date(booking.timeStart).toLocaleString()}</p>
                                     <p>Время окончания: {new Date(booking.timeEnd).toLocaleString()}</p>
+                                    {user.role ==='admin' ?(
+                                        <a href={route('admin.orders.details', {'id': booking.orderId})}>Посмотреть детали...</a>
+                                    ):(
+                                        <></>
+                                        //<a href={route('')}>Посмотреть детали...</a>
+                                    )}
                                     <label><br /></label>
                                 </li>
                             ))}
@@ -105,6 +111,12 @@ const OrdersComponent = () => {
                                     <p>Стол ID: {booking.tableId}</p>
                                     <p>Время начала: {new Date(booking.timeStart).toLocaleString()}</p>
                                     <p>Время окончания: {new Date(booking.timeEnd).toLocaleString()}</p>
+                                    {user.role ==='admin' ?(
+                                        <a href={route('admin.orders.details', {'id': booking.orderId})}>Посмотреть детали...</a>
+                                    ):(
+                                        <></>
+                                        //<a href={route('')}>Посмотреть детали...</a>
+                                    )}
                                 </li>
                             ))}
                         </ul>
@@ -127,14 +139,20 @@ const OrdersComponent = () => {
                                     {user.role === 'admin' && <p>Клиент: {order.id_user ? (
                                         <>{order.id_user}
                                         </>
-                                    ):(
+                                    ) : (
                                         <>{order.client_name}
                                         </>)}
                                     </p>}
                                     <p>Сумма: {order.total_price}</p>
                                     <p>Время создания: {new Date(order.created_at).toLocaleString()}</p>
                                     <p>Статус: {order.status}</p>
-                                    <br />
+                                    {user.role ==='admin' ?(
+                                        <a href={route('admin.orders.details', {'id': order.id})}>Посмотреть детали...</a>
+                                    ):(
+                                        <></>
+                                        //<a href={route('')}>Посмотреть детали...</a>
+                                    )}
+                                    <br/><br/>
                                 </li>
                             ))}
                         </ul>

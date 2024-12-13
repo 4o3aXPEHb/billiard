@@ -89,7 +89,7 @@ class UserController extends Controller
     }
 
     public function orderConfirm($id){
-        $order = Order::with('orderedTables')->find($id);
+        $order = Order::with(['user', 'admin', 'orderedTables.blockedTable'])->find($id);
         return Inertia::render('Main/ConfirmOrderPage', [
             'order' => $order,
             'user' => Auth::user(),
