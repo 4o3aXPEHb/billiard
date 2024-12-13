@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\BlockedTable;
+use App\Models\Order;
 use App\Models\Table;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -24,7 +25,8 @@ class UserController extends Controller
         return inertia('Main/Order', [
             'tables' => $tables,
             'bookedTables' => $blockedTables,
-            'user' => Auth::user()]);
+            'user' => Auth::user(),
+        ]);
     }
 
     public function orderPost(Request $request){
@@ -47,7 +49,7 @@ class UserController extends Controller
 
         $idOrder = DB::table('orders')->insertGetId([
             'id_admin' => ($isAdmin ? $userId : null),
-            'id_user' => ($isAuthorized ? $userId : null),
+            'id_user' => ($isAuthorized && !$isAdmin ? $userId : null),
             'status' => 'processed',
             'total_price' => 0, //********Заполнить
             'client_name' => ($isAdmin || !$isAuthorized ? $request->client['name'] : null),
@@ -55,20 +57,52 @@ class UserController extends Controller
             'client_phone' => ($isAdmin || !$isAuthorized ? $request->client['phone'] : null),
         ]);
 
+        // вычисление цены стола по времени
+        $timeStart = Carbon::parse($request->timeStart);
+        $timeEnd = Carbon::parse($request->timeEnd);
+
+        // Вычисляем разницу в минутах
+        $minutesDifference = $timeEnd->diffInMinutes($timeStart);
+
+        // Преобразуем в часы в виде числа
+        $hours = $minutesDifference / 60;
+
+        $tableHourPrice = Table::query()->where('id','=',$request->id_table)->get()->first()->hour_price;
+        $tableTotalPrice = $tableHourPrice * $hours;
+
         $idOrderTable = DB::table('order_tables')->insertGetId([
             'id_blocked_table' => $idBlockedTable,
             'id_order' => $idOrder,
-            'price'    => 100
+            'price'    => $tableTotalPrice,
         ]);
 
-        return redirect()->route('main.order', [
-            'id_blocked_table' => $idBlockedTable,
-            'id_order' => $idOrder,
-            'idOrderTable' => $idOrderTable,
+
+        //надо бы похорошему все столы перемножить*************************
+        DB::table('orders')->where('id','=',$idOrder)->update([
+            'total_price' => $tableTotalPrice,
+        ]);
+
+        return response()->json([
+            'redirect' => route('main.order.confirm', ['id' => $idOrder]),
         ]);
     }
 
-    public function orderDetail($request){
-        $blockedTable = BlockedTable::query()->find($request->id_blocked_table);
+    public function orderConfirm($id){
+        $order = Order::with('orderedTables')->find($id);
+        return Inertia::render('Main/ConfirmOrderPage', [
+            'order' => $order,
+            'user' => Auth::user(),
+        ]);
+    }
+
+    public function orderUpdateStatus(Request $request)
+    {
+        DB::table('orders')->where('id','=',$request->id_order)->update([
+            'status' => $request->status,
+        ]);
+        return response()->json([
+            'redirect' => route('main.order'),
+            'orderStatus' => $request->status,
+        ]);
     }
 }
