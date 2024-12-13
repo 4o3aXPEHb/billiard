@@ -8,8 +8,4 @@ use Illuminate\Database\Eloquent\Model;
 class Order extends Model
 {
     use HasFactory;
-    public function orderedTables()
-    {
-        return $this->hasMany(OrderTable::class, 'id_order');
-    }
 }
