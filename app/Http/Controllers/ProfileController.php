@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Models\Order;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -59,5 +60,17 @@ class ProfileController extends Controller
         $request->session()->regenerateToken();
 
         return Redirect::to('/');
+    }
+
+    public function myOrders(): Response
+    {
+        $userId = Auth::id();
+        $orders = Order::with('orderedTables.blockedTable') // Загрузка связанных столов
+        ->where('id_user', $userId)
+            ->get();
+
+        return Inertia::render('Profile/MyOrders', [
+            'orders' => $orders,
+        ]);
     }
 }

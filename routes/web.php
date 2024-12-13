@@ -35,6 +35,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::get('/profile/orders', [ProfileController::class, 'myOrders'])->name('profile.orders');
 });
 
 // Для админа
@@ -46,9 +47,6 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::post('/admin/clients/{id}/update', [AdminController::class, 'clientUpdate'])->name('clients.update');
 });
 
-// Для авторизованых
-Route::middleware(['auth'])->group(function () {
-});
 
 //Для всех
 Route::get('/', [UserController::class, 'index'])->name('main');

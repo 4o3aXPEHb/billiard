@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 use App\Models\User;
 
@@ -17,7 +18,7 @@ use App\Models\User;
 class UserController extends Controller
 {
     public function index(){
-        return redirect()->route('main.order');
+        return Redirect::to(route('main.order'));
     }
     public function order(){
         $tables = Table::all();

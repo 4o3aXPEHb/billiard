@@ -229,27 +229,32 @@ const Order = () => {
                             })}
                         </select>
 
-                        <div>
-                            <label style={{ color: 'white' }}>Имя:</label>
-                            <input
-                                type="text"
-                                value={clientInfo.name}
-                                onChange={(e) => setClientInfo({ ...clientInfo, name: e.target.value })}
-                                required
-                                style={styles.input}
-                            />
-                        </div>
+                        {/* Поля контактной информации Если юзер не вошел или Если админ зашел*/}
+                        {(!user || user.role === 'admin') &&
+                            <div>
+                                <div>
+                                    <label style={{ color: 'white' }}>Имя:</label>
+                                    <input
+                                        type="text"
+                                        value={clientInfo.name}
+                                        onChange={(e) => setClientInfo({ ...clientInfo, name: e.target.value })}
+                                        required
+                                        style={styles.input}
+                                    />
+                                </div>
 
-                        <div>
-                            <label style={{ color: 'white' }}>Телефон:</label>
-                            <input
-                                type="tel"
-                                value={clientInfo.phone}
-                                onChange={(e) => setClientInfo({ ...clientInfo, phone: e.target.value })}
-                                required
-                                style={styles.input}
-                            />
-                        </div>
+                                <div>
+                                    <label style={{ color: 'white' }}>Телефон:</label>
+                                    <input
+                                        type="tel"
+                                        value={clientInfo.phone}
+                                        onChange={(e) => setClientInfo({ ...clientInfo, phone: e.target.value })}
+                                        required
+                                        style={styles.input}
+                                    />
+                                </div>
+                            </div>
+                        }
 
                         <button
                             type="submit"

@@ -14,4 +14,8 @@ class OrderTable extends Model
     {
         return $this->belongsTo(Order::class, 'id_order'); // Укажите внешний ключ, если он отличается
     }
+    public function blockedTable()
+    {
+        return $this->belongsTo(BlockedTable::class, 'id_blocked_table'); // Укажите внешний ключ, если он отличается
+    }
 }
