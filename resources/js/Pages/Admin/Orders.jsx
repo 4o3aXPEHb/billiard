@@ -1,11 +1,13 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import AdminPanel from './AdminPanel';
+import ProfileAppBar from "@/Pages/Profile/ProfileAppBar.jsx";
+import OrdersComponent from "@/Components/OrdersComponent.jsx";
 
-const Orders = () => {
+const Orders = ({ orders ,user}) => {
+
     return (
         <AdminPanel>
-            <h1>Заказы</h1>
-            <p>Список заказов будет здесь.</p>
+            <OrdersComponent orders={orders} user={user}></OrdersComponent>
         </AdminPanel>
     );
 };

@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Order;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use App\Models\User;
+use Inertia\Response;
 
 class AdminController extends Controller
 {
@@ -32,9 +35,18 @@ class AdminController extends Controller
         ]);
     }
 
-    public function orders(){
-        return Inertia::render('Admin/Orders');
+    public function orders(): Response
+    {
+        $user = Auth::user();
+        $orders = Order::with('orderedTables.blockedTable') // Загрузка связанных столов
+        ->get();
+
+        return Inertia::render('Admin/Orders', [
+            'orders' => $orders,
+            'user' => $user,
+        ]);
     }
+
     public function tournaments(){
         return Inertia::render('Admin/Tournaments');
     }

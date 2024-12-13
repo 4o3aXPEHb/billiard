@@ -64,13 +64,14 @@ class ProfileController extends Controller
 
     public function myOrders(): Response
     {
-        $userId = Auth::id();
+        $user = Auth::user();
         $orders = Order::with('orderedTables.blockedTable') // Загрузка связанных столов
-        ->where('id_user', $userId)
+        ->where('id_user', $user->id)
             ->get();
 
         return Inertia::render('Profile/MyOrders', [
             'orders' => $orders,
+            'user' => $user,
         ]);
     }
 }
