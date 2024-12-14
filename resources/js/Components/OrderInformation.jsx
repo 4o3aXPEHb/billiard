@@ -1,43 +1,51 @@
 import React from 'react';
-import { Inertia } from '@inertiajs/inertia';
-import {router} from "@inertiajs/core";
+import { Box, Typography, Grid } from '@mui/material';
 
-
-//******************************
-// принимает $order = Order::with(['user', 'admin', 'orderedTables.blockedTable'])->find($id);
-//******************************
 export default function OrderInformation({ order }) {
     return (
-        <>
-            <div>
-                <h2>Информация о заказе</h2>
-                <p>Номер заказа: {order.id}</p>
-                <p>Статус: {order.status}</p>
-                <h3>Заказанные столы:</h3>
-                <ul>
-                    {order.ordered_tables.map((table) => (
-                        <li key={table.id}>
-                            Стол #{table.table_number}, время: {table.time_start} - {table.time_end}
-                        </li>
-                    ))}
-                </ul>
-            </div>
+        <Box sx={{ padding: 4, backgroundColor: '#1B1B1B', color: '#FFFFFF' }}>
+            <Typography variant="h4" gutterBottom sx={{ color: '#FFFFFF' }}>
+                Информация о заказе
+            </Typography>
 
-            {order.client_name && <div>
-                <h2>Информация о клиенте</h2>
-                <p>Имя: {order.client_name}</p>
-                <p>Email: {order.client_email}</p>
-                <p>Телефон: {order.client_phone}</p>
-            </div>}
-            {order.id_user && <div>
-                <h2>Информация о клиенте</h2>
-                <p>Имя: {order.user.name}</p>
-                <p>Email: {order.user.email}</p>
-                {order.user.phone && <p>Телефон: {order.user.phone}</p>}
-            </div>}
-            {order.id_admin && <div>
-                <p>Имя администратора: {order.admin.name}</p>
-            </div>}
-        </>
-    )
+            <Grid container spacing={4} sx={{ marginBottom: 4 }}>
+                <Grid item xs={12} md={6}>
+                    <Box sx={{ backgroundColor: '#2C2C2C', padding: 2, borderRadius: 2 }}>
+                        <Typography variant="h6" sx={{ color: '#FFFFFF' }}>Детали заказа</Typography>
+                        <Typography>Номер заказа: {order.id}</Typography>
+                        <Typography>Статус: {order.status}</Typography>
+                    </Box>
+                </Grid>
+                {order.id_admin && (
+                    <Grid item xs={12} md={6}>
+                        <Box sx={{ backgroundColor: '#2C2C2C', padding: 2, borderRadius: 2 }}>
+                            <Typography variant="h6" sx={{ color: '#FFFFFF' }}>Администратор</Typography>
+                            <Typography>Имя: {order.admin.name}</Typography>
+                        </Box>
+                    </Grid>
+                )}
+                {(order.client_name || order.id_user) && (
+                    <Grid item xs={12} md={6}>
+                        <Box sx={{ backgroundColor: '#2C2C2C', padding: 2, borderRadius: 2 }}>
+                            <Typography variant="h6" sx={{ color: '#FFFFFF' }}>Информация о клиенте</Typography>
+                            {order.client_name && (
+                                <>
+                                    <Typography>Имя: {order.client_name}</Typography>
+                                    <Typography>Email: {order.client_email}</Typography>
+                                    <Typography>Телефон: {order.client_phone}</Typography>
+                                </>
+                            )}
+                            {order.id_user && (
+                                <>
+                                    <Typography>Имя: {order.user.name}</Typography>
+                                    <Typography>Email: {order.user.email}</Typography>
+                                    {order.user.phone && <Typography>Телефон: {order.user.phone}</Typography>}
+                                </>
+                            )}
+                        </Box>
+                    </Grid>
+                )}
+            </Grid>
+        </Box>
+    );
 }

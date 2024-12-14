@@ -1,8 +1,23 @@
 import React, { useState } from 'react';
-import { usePage, Link } from '@inertiajs/react';
+import { usePage } from '@inertiajs/react';
 import AdminPanel from "@/Pages/Admin/AdminPanel.jsx";
-import {Inertia} from "@inertiajs/inertia";
-import {router} from "@inertiajs/core";
+import { router } from "@inertiajs/core";
+import {
+    Box,
+    Typography,
+    TextField,
+    Button,
+    Table,
+    TableHead,
+    TableRow,
+    TableCell,
+    TableBody,
+    Pagination,
+    Dialog,
+    DialogTitle,
+    DialogContent,
+    DialogActions
+} from '@mui/material';
 
 const Clients = () => {
     const { clients, filters } = usePage().props;
@@ -12,8 +27,7 @@ const Clients = () => {
     // Функция для отправки формы поиска
     const handleSearch = (e) => {
         e.preventDefault();
-        //Inertia.get(route('admin.clients'), { search });
-        router.get(route('admin.clients'),{ search })
+        router.get(route('admin.clients'), { search });
     };
 
     // Функция для открытия формы редактирования
@@ -26,91 +40,158 @@ const Clients = () => {
         setEditClient(null);
     };
 
+    // Стили
+    const tableContainerStyle = {
+        backgroundColor: '#1b1b1b',
+        borderRadius: '8px',
+        boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.3)',
+        padding: '16px',
+    };
+
+    const headerStyle = {
+        marginBottom: '24px',
+        color: '#FFD700',
+        fontWeight: 'bold',
+    };
+
+    const paginationStyle = {
+        display: 'flex',
+        justifyContent: 'center',
+        marginTop: '24px',
+    };
+
+    const inputStyle = {
+        backgroundColor: '#1C2538',
+        color: '#FFFFFF',
+        borderRadius: '4px',
+        '& .MuiInputBase-input': {
+            color: '#FFFFFF',
+        },
+        '& .MuiInputLabel-root': {
+            color: '#AAAAAA',
+        },
+    };
+
+    const buttonStyle = {
+        backgroundColor: '#FFD700',
+        color: '#2E3B55',
+        fontWeight: 'bold',
+        '&:hover': {
+            backgroundColor: '#E6C200',
+        },
+    };
+
+    const tableCellStyle = {
+        color: '#FFFFFF',
+        fontWeight: 'bold',
+    };
+
     return (
         <AdminPanel>
-            <h1>Клиенты</h1>
+            <Typography variant="h4" gutterBottom sx={headerStyle}>
+                Клиенты
+            </Typography>
 
             {/* Форма поиска */}
-            <form onSubmit={handleSearch}>
-                <input
-                    type="text"
-                    placeholder="Поиск по имени или email"
+            <Box component="form" onSubmit={handleSearch} sx={{ display: 'flex', gap: 2, marginBottom: 4 }}>
+                <TextField
+                    variant="outlined"
+                    label="Поиск по имени или email"
+                    fullWidth
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
+                    sx={inputStyle}
                 />
-                <button type="submit">Поиск</button>
-            </form>
+                <Button type="submit" variant="contained" sx={buttonStyle}>
+                    Поиск
+                </Button>
+            </Box>
 
             {/* Таблица клиентов */}
-            <table>
-                <thead>
-                <tr>
-                    <th>Имя</th>
-                    <th>Email</th>
-                    <th>Действия</th>
-                </tr>
-                </thead>
-                <tbody>
-                {clients.data.map((client) => (
-                    <tr key={client.id}>
-                        <td>{client.name}</td>
-                        <td>{client.email}</td>
-                        <td>
-                            <button onClick={() => handleEdit(client)}>Редактировать</button>
-                        </td>
-                    </tr>
-                ))}
-                </tbody>
-            </table>
+            <Box sx={tableContainerStyle}>
+                <Table>
+                    <TableHead>
+                        <TableRow>
+                            <TableCell sx={tableCellStyle}>Имя</TableCell>
+                            <TableCell sx={tableCellStyle}>Email</TableCell>
+                            <TableCell sx={tableCellStyle}>Действия</TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {clients.data.map((client) => (
+                            <TableRow key={client.id}>
+                                <TableCell sx={tableCellStyle}>{client.name}</TableCell>
+                                <TableCell sx={tableCellStyle}>{client.email}</TableCell>
+                                <TableCell>
+                                    <Button
+                                        variant="outlined"
+                                        sx={{ color: '#FFD700', borderColor: '#FFD700' }}
+                                        onClick={() => handleEdit(client)}
+                                    >
+                                        Редактировать
+                                    </Button>
+                                </TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            </Box>
 
             {/* Пагинация */}
-            <div>
-                {clients.links.map((link, index) => (
-                    <Link
-                        key={index}
-                        href={link.url}
-                        dangerouslySetInnerHTML={{ __html: link.label }}
-                        className={link.active ? 'active' : ''}
-                    />
-                ))}
-            </div>
+            <Box sx={paginationStyle}>
+                <Pagination
+                    count={clients.links.length - 2}
+                    page={clients.current_page}
+                    onChange={(event, page) => {
+                        router.get(clients.path, { page });
+                    }}
+                />
+            </Box>
 
-            {/* Форма редактирования */}
+            {/* Диалоговое окно редактирования */}
             {editClient && (
-                <div>
-                    <h2>Редактировать клиента</h2>
-                    <form
-                        onSubmit={(e) => {
-                            e.preventDefault();
-                            Inertia.post(route('clients.update', editClient.id), {
-                                name: editClient.name,
-                                email: editClient.email,
-                            });
-                            router.reload();
-                        }}
-                    >
-                        <div>
-                            <label>Имя</label>
-                            <input
-                                type="text"
+                <Dialog open={!!editClient} onClose={handleCancel}>
+                    <DialogTitle>Редактировать клиента</DialogTitle>
+                    <DialogContent>
+                        <Box component="form" sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                            <TextField
+                                label="Имя"
+                                variant="outlined"
                                 value={editClient.name}
                                 onChange={(e) => setEditClient({ ...editClient, name: e.target.value })}
+                                fullWidth
+                                sx={inputStyle}
                             />
-                        </div>
-                        <div>
-                            <label>Email</label>
-                            <input
-                                type="email"
+                            <TextField
+                                label="Email"
+                                variant="outlined"
                                 value={editClient.email}
                                 onChange={(e) => setEditClient({ ...editClient, email: e.target.value })}
+                                fullWidth
+                                sx={inputStyle}
                             />
-                        </div>
-                        <button type="submit">Сохранить</button>
-                        <button type="button" onClick={handleCancel}>
+                        </Box>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button
+                            onClick={() => {
+                                Inertia.post(route('clients.update', editClient.id), {
+                                    name: editClient.name,
+                                    email: editClient.email,
+                                });
+                                router.reload();
+                                handleCancel();
+                            }}
+                            variant="contained"
+                            sx={buttonStyle}
+                        >
+                            Сохранить
+                        </Button>
+                        <Button onClick={handleCancel} variant="outlined" sx={{ color: '#FFD700', borderColor: '#FFD700' }}>
                             Отмена
-                        </button>
-                    </form>
-                </div>
+                        </Button>
+                    </DialogActions>
+                </Dialog>
             )}
         </AdminPanel>
     );

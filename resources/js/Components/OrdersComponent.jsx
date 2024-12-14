@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import AdminPanel from '@/Pages/Admin/AdminPanel';
-import ProfileAppBar from '@/Pages/Profile/ProfileAppBar.jsx';
-import {usePage} from "@inertiajs/react";
+import { usePage } from '@inertiajs/react';
 
 const OrdersComponent = () => {
     const { orders, user } = usePage().props;
@@ -48,120 +47,113 @@ const OrdersComponent = () => {
 
     const filterBySearch = (list) => {
         if (!searchQuery) return list;
-        list = list.filter(item => {
-            if(item.id) {
-                return item.id.toString().includes(searchQuery)
-            }
-            else if(item.orderId) {
-                return item.orderId.toString().includes(searchQuery)
+        return list.filter(item => {
+            if (item.id) {
+                return item.id.toString().includes(searchQuery);
+            } else if (item.orderId) {
+                return item.orderId.toString().includes(searchQuery);
             }
         });
-        return list;
     };
 
     return (
-        <div>
-            <input
-                type="text"
-                placeholder="Поиск по номеру заказа"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                style={{ marginBottom: '10px', padding: '5px', width: '100%' }}
-            />
+            <div style={{ padding: '16px' }}>
+                <input
+                    type="text"
+                    placeholder="Поиск по номеру заказа"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    style={{ width: '100%', padding: '8px', marginBottom: '16px', borderRadius: '4px' }}
+                />
 
-            <section>
-                <h2 onClick={() => setActiveCollapsed(!activeCollapsed)} style={{ cursor: 'pointer' }}>
-                    {activeCollapsed ? '+' : '-'} Активные бронирования
-                </h2>
-                {!activeCollapsed && (
-                    filterBySearch(activeBookings).length > 0 ? (
-                        <ul>
-                            {filterBySearch(activeBookings).map((booking, index) => (
-                                <li key={index}>
-                                    <p>Заказ ID: {booking.orderId}</p>
-                                    <p>Стол ID: {booking.tableId}</p>
-                                    <p>Время начала: {new Date(booking.timeStart).toLocaleString()}</p>
-                                    <p>Время окончания: {new Date(booking.timeEnd).toLocaleString()}</p>
-                                    {user.role ==='admin' ?(
-                                        <a href={route('admin.orders.details', {'id': booking.orderId})}>Посмотреть детали...</a>
-                                    ):(
-                                        <></>
-                                        //<a href={route('')}>Посмотреть детали...</a>
-                                    )}
-                                    <label><br /></label>
-                                </li>
-                            ))}
-                        </ul>
-                    ) : (
-                        <p>Нет активных бронирований.</p>
-                    )
-                )}
-            </section>
+                <div style={{ backgroundColor: '#1b1b1b', color: '#FFFFFF', padding: '16px', borderRadius: '8px', marginBottom: '16px' }}>
+                    <h6 onClick={() => setActiveCollapsed(!activeCollapsed)} style={{ cursor: 'pointer' }}>
+                        {activeCollapsed ? '►' : '▼'} Активные бронирования
+                    </h6>
+                    {!activeCollapsed && (
+                        <div>
+                            {filterBySearch(activeBookings).length > 0 ? (
+                                <ul>
+                                    {filterBySearch(activeBookings).map((booking, index) => (
+                                        <li key={index}>
+                                            <strong>Заказ ID: {booking.orderId}</strong>
+                                            <div>Стол ID: {booking.tableId}</div>
+                                            <div>Время начала: {new Date(booking.timeStart).toLocaleString()}</div>
+                                            <div>Время окончания: {new Date(booking.timeEnd).toLocaleString()}</div>
+                                            {user.role === 'admin' && (
+                                                <a href={route('admin.orders.details', { id: booking.orderId })}>
+                                                    Посмотреть детали
+                                                </a>
+                                            )}
+                                        </li>
+                                    ))}
+                                </ul>
+                            ) : (
+                                <p>Нет активных бронирований.</p>
+                            )}
+                        </div>
+                    )}
+                </div>
 
-            <section>
-                <h2 onClick={() => setCompletedCollapsed(!completedCollapsed)} style={{ cursor: 'pointer' }}>
-                    {completedCollapsed ? '+' : '-'} Завершённые бронирования
-                </h2>
-                {!completedCollapsed && (
-                    filterBySearch(completedBookings).length > 0 ? (
-                        <ul>
-                            {filterBySearch(completedBookings).map((booking, index) => (
-                                <li key={index}>
-                                    <p>Заказ ID: {booking.orderId}</p>
-                                    <p>Стол ID: {booking.tableId}</p>
-                                    <p>Время начала: {new Date(booking.timeStart).toLocaleString()}</p>
-                                    <p>Время окончания: {new Date(booking.timeEnd).toLocaleString()}</p>
-                                    {user.role ==='admin' ?(
-                                        <a href={route('admin.orders.details', {'id': booking.orderId})}>Посмотреть детали...</a>
-                                    ):(
-                                        <></>
-                                        //<a href={route('')}>Посмотреть детали...</a>
-                                    )}
-                                </li>
-                            ))}
-                        </ul>
-                    ) : (
-                        <p>Нет завершённых бронирований.</p>
-                    )
-                )}
-            </section>
+                <div style={{ backgroundColor: '#1b1b1b', color: '#FFFFFF', padding: '16px', borderRadius: '8px', marginBottom: '16px' }}>
+                    <h6 onClick={() => setCompletedCollapsed(!completedCollapsed)} style={{ cursor: 'pointer' }}>
+                        {completedCollapsed ? '►' : '▼'} Завершённые бронирования
+                    </h6>
+                    {!completedCollapsed && (
+                        <div>
+                            {filterBySearch(completedBookings).length > 0 ? (
+                                <ul>
+                                    {filterBySearch(completedBookings).map((booking, index) => (
+                                        <li key={index}>
+                                            <strong>Заказ ID: {booking.orderId}</strong>
+                                            <div>Стол ID: {booking.tableId}</div>
+                                            <div>Время начала: {new Date(booking.timeStart).toLocaleString()}</div>
+                                            <div>Время окончания: {new Date(booking.timeEnd).toLocaleString()}</div>
+                                            {user.role === 'admin' && (
+                                                <a href={route('admin.orders.details', { id: booking.orderId })}>
+                                                    Посмотреть детали
+                                                </a>
+                                            )}
+                                        </li>
+                                    ))}
+                                </ul>
+                            ) : (
+                                <p>Нет завершённых бронирований.</p>
+                            )}
+                        </div>
+                    )}
+                </div>
 
-            <section>
-                <h2 onClick={() => setAllOrdersCollapsed(!allOrdersCollapsed)} style={{ cursor: 'pointer' }}>
-                    {allOrdersCollapsed ? '+' : '-'} Все заказы
-                </h2>
-                {!allOrdersCollapsed && (
-                    filterBySearch(orders).length > 0 ? (
-                        <ul>
-                            {filterBySearch(orders).map(order => (
-                                <li key={order.id}>
-                                    <p>Заказ ID: {order.id}</p>
-                                    {user.role === 'admin' && <p>Клиент: {order.id_user ? (
-                                        <>{order.id_user}
-                                        </>
-                                    ) : (
-                                        <>{order.client_name}
-                                        </>)}
-                                    </p>}
-                                    <p>Сумма: {order.total_price}</p>
-                                    <p>Время создания: {new Date(order.created_at).toLocaleString()}</p>
-                                    <p>Статус: {order.status}</p>
-                                    {user.role ==='admin' ?(
-                                        <a href={route('admin.orders.details', {'id': order.id})}>Посмотреть детали...</a>
-                                    ):(
-                                        <></>
-                                        //<a href={route('')}>Посмотреть детали...</a>
-                                    )}
-                                    <br/><br/>
-                                </li>
-                            ))}
-                        </ul>
-                    ) : (
-                        <p>Нет заказов.</p>
-                    )
-                )}
-            </section>
-        </div>
+                <div style={{ backgroundColor: '#1b1b1b', color: '#FFFFFF', padding: '16px', borderRadius: '8px', marginBottom: '16px' }}>
+                    <h6 onClick={() => setAllOrdersCollapsed(!allOrdersCollapsed)} style={{ cursor: 'pointer' }}>
+                        {allOrdersCollapsed ? '►' : '▼'} Все заказы
+                    </h6>
+                    {!allOrdersCollapsed && (
+                        <div>
+                            {filterBySearch(orders).length > 0 ? (
+                                <ul>
+                                    {filterBySearch(orders).map((order) => (
+                                        <li key={order.id}>
+                                            <strong>Заказ ID: {order.id}</strong>
+                                            <div>{user.role === 'admin' && `Клиент: ${order.id_user || order.client_name}`}</div>
+                                            <div>Сумма: {order.total_price}</div>
+                                            <div>Время создания: {new Date(order.created_at).toLocaleString()}</div>
+                                            <div>Статус: {order.status}</div>
+                                            {user.role === 'admin' && (
+                                                <a href={route('admin.orders.details', { id: order.id })}>
+                                                    Посмотреть детали
+                                                </a>
+                                            )}
+                                        </li>
+                                    ))}
+                                </ul>
+                            ) : (
+                                <p>Нет заказов.</p>
+                            )}
+                        </div>
+                    )}
+                </div>
+            </div>
     );
 };
 

@@ -14,7 +14,7 @@ export default function Login({ status, canResetPassword }) {
         remember: false,
     });
 
-    const [isHovered, setIsHovered] = useState(false); // Добавляем состояние для отслеживания наведения
+    const [isHovered, setIsHovered] = useState(false);
 
     useEffect(() => {
         return () => {
@@ -42,13 +42,12 @@ export default function Login({ status, canResetPassword }) {
     };
 
     const formContainerStyle = {
-        padding: '40px',
-        maxWidth: '500px',
-        margin: '50px auto',
-        backgroundColor: 'rgba(0, 0, 0, 0)',  
+        backgroundColor: 'rgba(0, 0, 0, 0.8)',
         borderRadius: '10px',
+        padding: '20px',
         color: 'white',
         width: '100%',
+        maxWidth: '400px',
     };
 
     const headingStyle = {
@@ -94,7 +93,7 @@ export default function Login({ status, canResetPassword }) {
     const hoverStyle = {
         backgroundColor: '#000',
         color: '#FFF',
-        transform: 'scale(1.05)', // эффект увеличения кнопки при наведении
+        transform: 'scale(1.05)', 
     };
 
     const buttonContainerStyle = {

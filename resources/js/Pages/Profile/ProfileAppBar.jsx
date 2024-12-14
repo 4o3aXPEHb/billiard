@@ -28,9 +28,9 @@ const ProfileAppBar = ({ children }) => {
     };
 
     return (
-        <Box>
+        <Box sx={{ backgroundImage:`url('/4.jpg')` }}>
             <AppBar position="static">
-                <Toolbar>
+                <Toolbar sx={{ backgroundColor: '#1D1D1D' }}>
                     <Typography variant="h6" sx={{ flexGrow: 1 }}>
                         Личный кабинет
                     </Typography>
@@ -41,9 +41,10 @@ const ProfileAppBar = ({ children }) => {
                     </Tabs>
                 </Toolbar>
             </AppBar>
-            <Box sx={{ padding: 3 }}>{children}</Box>
+            <Box sx={{ padding: 3, height: '100vh', overflowY: 'auto',}}>{children}</Box>
         </Box>
     );
+    
 };
 
 export default ProfileAppBar;

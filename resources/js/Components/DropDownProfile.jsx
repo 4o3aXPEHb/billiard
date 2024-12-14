@@ -1,42 +1,101 @@
-import Dropdown from "@/Components/Dropdown.jsx";
-import {useState} from "react";
-export default function DropDownProfile({ user }) {
-    const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
+import React, { useState } from 'react';
+import { Box, Button, Menu, MenuItem, Typography } from '@mui/material';
 
-    return (<div className="hidden sm:flex sm:items-center sm:ms-6">
-        <div className="ms-3 relative">
-            <Dropdown>
-                <Dropdown.Trigger>
-                    <span className="inline-flex rounded-md">
-                        <button
-                            type="button"
-                            className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150"
-                        >
-                            {user.name}
+const DropDownProfile = ({ user }) => {
+    const [anchorEl, setAnchorEl] = useState(null);
+    const open = Boolean(anchorEl);
 
-                            <svg
-                                className="ms-2 -me-0.5 h-4 w-4"
-                                xmlns="http://www.w3.org/2000/svg"
-                                viewBox="0 0 20 20"
-                                fill="currentColor"
-                            >
-                                <path
-                                    fillRule="evenodd"
-                                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                    clipRule="evenodd"
-                                />
-                            </svg>
-                        </button>
-                    </span>
-                </Dropdown.Trigger>
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
 
-                <Dropdown.Content>
-                    <Dropdown.Link href={route('profile.edit')}>Profile</Dropdown.Link>
-                    <Dropdown.Link href={route('logout')} method="post" as="button">
-                        Log Out
-                    </Dropdown.Link>
-                </Dropdown.Content>
-            </Dropdown>
-        </div>
-    </div>)
-}
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
+
+    return (
+        <Box sx={{ display: 'flex', alignItems: 'center', marginLeft: '20px' }}>
+            <Button
+                aria-controls={open ? 'profile-menu' : undefined}
+                aria-haspopup="true"
+                aria-expanded={open ? 'true' : undefined}
+                onClick={handleClick}
+                sx={{
+                    color: 'white',
+                    fontWeight: 'bold',
+                    textTransform: 'none',
+                    backgroundColor: '#333',
+                    padding: '5px 10px',
+                    borderRadius: '5px',
+                    width: '105px',
+                    transition: 'all 0.3s ease',
+                    '&:hover': {
+                        backgroundColor: '#ffcc00',
+                        color: '#1e1c1b',
+                    },
+                }}
+            >
+                {user.name}
+                
+                <svg
+                    className="ms-2 -me-0.5 h-4 w-4"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                >
+                <path
+                    fillRule="evenodd"
+                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                    clipRule="evenodd"
+                />
+                </svg>
+            </Button>
+            <Menu
+                id="profile-menu"
+                anchorEl={anchorEl}
+                open={open}
+                onClose={handleClose}
+                MenuListProps={{
+                    'aria-labelledby': 'basic-button',
+                }}
+                sx={{
+                    '& .MuiPaper-root': {
+                        backgroundColor: '#333',
+                        color: 'white',
+                    },
+                }}
+            >
+                <MenuItem
+                    onClick={() => {
+                        handleClose();
+                        window.location.href = route('profile.edit');
+                    }}
+                    sx={{
+                        '&:hover': {
+                            backgroundColor: '#ffcc00',
+                            color: '#1e1c1b',
+                        },
+                    }}
+                >
+                    Profile
+                </MenuItem>
+                <MenuItem
+                    onClick={() => {
+                        handleClose();
+                        window.location.href = route('logout');
+                    }}
+                    sx={{
+                        '&:hover': {
+                            backgroundColor: '#ffcc00',
+                            color: '#1e1c1b',
+                        },
+                    }}
+                >
+                    Log Out
+                </MenuItem>
+            </Menu>
+        </Box>
+    );
+};
+
+export default DropDownProfile;
