@@ -12,6 +12,7 @@ const Order = () => {
     const [endTime, setEndTime] = useState('');
     const [clientInfo, setClientInfo] = useState({ name: '', email: '', phone: '' });
 
+
     const generateTimeSlots = () => {
         const slots = [];
         const start = new Date();
@@ -71,7 +72,8 @@ const Order = () => {
         })
             .then(response => {
                 if (response.data.redirect) {
-                    router.get(response.data.redirect)
+                    console.log('asd   ' + response.data.redirect)
+                    window.location.href = response.data.redirect
                 }
             })
         };
@@ -131,6 +133,13 @@ const Order = () => {
             marginBottom: '15px',
             padding: '10px',
         },
+        inputBlack: {
+            color: 'black',
+            display: 'block',
+            width: '100%',
+            marginBottom: '15px',
+            padding: '10px',
+        },
     };
 
     return (
@@ -162,7 +171,7 @@ const Order = () => {
                         <select
                             value={selectedTable || ''}
                             onChange={(e) => setSelectedTable(Number(e.target.value))}
-                            style={styles.input}
+                            style={styles.inputBlack}
                         >
                             <option value="" disabled>
                                 -- Выберите --
@@ -180,7 +189,7 @@ const Order = () => {
                             value={selectedDate}
                             onChange={(e) => setSelectedDate(e.target.value)}
                             required
-                            style={styles.input}
+                            style={styles.inputBlack}
                         />
 
                         <label style={{ color: 'white' }}>Время начала:</label>
@@ -188,7 +197,7 @@ const Order = () => {
                             value={startTime}
                             onChange={(e) => setStartTime(e.target.value)}
                             disabled={!selectedDate || !selectedTable}
-                            style={styles.input}
+                            style={styles.inputBlack}
                         >
                             <option value="" disabled>
                                 -- Выберите --
@@ -209,7 +218,7 @@ const Order = () => {
                             value={endTime}
                             onChange={(e) => setEndTime(e.target.value)}
                             disabled={!startTime}
-                            style={styles.input}
+                            style={styles.inputBlack}
                         >
                             <option value="" disabled>
                                 -- Выберите --
@@ -239,7 +248,7 @@ const Order = () => {
                                         value={clientInfo.name}
                                         onChange={(e) => setClientInfo({ ...clientInfo, name: e.target.value })}
                                         required
-                                        style={styles.input}
+                                        style={styles.inputBlack}
                                     />
                                 </div>
 
@@ -250,7 +259,7 @@ const Order = () => {
                                         value={clientInfo.phone}
                                         onChange={(e) => setClientInfo({ ...clientInfo, phone: e.target.value })}
                                         required
-                                        style={styles.input}
+                                        style={styles.inputBlack}
                                     />
                                 </div>
                             </div>
